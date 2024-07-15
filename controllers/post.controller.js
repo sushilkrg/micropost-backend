@@ -29,7 +29,7 @@ export const createPost = async (req, res) => {
     });
 
     await newPost.save();
-    res.status(200).json(newPost);
+    res.status(200).json({newPost, message: "Post created successfully"});
   } catch (error) {
     console.log("Error in createPost: ", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -50,7 +50,7 @@ export const deletePost = async (req, res) => {
     }
 
     if (post.postImg) {
-      const imgId = post.img.split("/").pop().split(".")[0];
+      const imgId = post.postImg.split("/").pop().split(".")[0];
       await cloudinary.uploader.destroy(imgId);
     }
 
@@ -81,7 +81,11 @@ export const likeUnlikePost = async (req, res) => {
       const updateLikes = post.likes.filter(
         (id) => id.toString() !== userId.toString()
       );
-      res.status(200).json(updateLikes);
+      res.status(200).json({
+        updateLikes,
+        message: "User unliked the post.",
+        success: true,
+      });
     } else {
       // like the post
       post.likes.push(userId);
@@ -89,7 +93,11 @@ export const likeUnlikePost = async (req, res) => {
       await post.save();
 
       const updatedLikes = post.likes;
-      res.status(200).json(updatedLikes);
+      res.status(200).json({
+        updatedLikes,
+        message: "User liked the post.",
+        success: true,
+      });
     }
   } catch (error) {
     console.log("Error in likeUnlikePost controller: ", error);
