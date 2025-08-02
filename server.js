@@ -10,6 +10,7 @@ import userRoutes from "./routes/user.route.js";
 import postRoutes from "./routes/post.route.js";
 
 import connectDB from "./database/connectDB.js";
+import { getServerHealth } from "./lib/utils/getServerHealth.js";
 dotenv.config();
 
 cloudinary.config({
@@ -42,6 +43,7 @@ app.use(cors(corsOptions));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/health", getServerHealth);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
